@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -99,14 +99,11 @@ func main() {
 		IdleTimeout:       60 * time.Second,
 	}
 
-	// p, err := strconv.Atoi(port)
-	// if err != nil || p < 1 || p > 65535 {
-	// 	// log.Fatalf("invalid port: %q", port)
-	// 	log.Fatalf("invalid port:")
-	// }
-	safePort := regexp.MustCompile(`[^0-9]`).ReplaceAllString(port, "")
-	log.Fatalf("invalid port: %s", safePort)
+	p, err := strconv.Atoi(port)
+	if err != nil || p < 1 || p > 65535 {
+		log.Fatal("invalid port")
+	}
 
-	log.Printf("Serving on port: %d\n", p)
+	log.Printf("Serving on port: %q\n", p)
 	log.Fatal(srv.ListenAndServe())
 }
